@@ -170,11 +170,11 @@ module.exports = function(
   args.push('react', 'react-dom');
 
   // install all dependencies
-  console.log(`Installing all dependencies using ${command}...`);
+  console.log(`Installing all dependencies using ${allCommand}...`);
   console.log();
-  const proc = spawn.sync(allCommand, args, { stdio: 'inherit' });
+  const proc = spawn.sync(allCommand, [], { stdio: 'inherit' });
   if (proc.status !== 0) {
-    console.error(`\`${allCommand} ${args.join(' ')}\` failed`);
+    console.error(`\`${allCommand}\` failed`);
     return;
   }
 
