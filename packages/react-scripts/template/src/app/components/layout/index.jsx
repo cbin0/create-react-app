@@ -4,7 +4,6 @@ import BaseComponent from '../base';
 import Content from './content'
 import Header from './header'
 import Footer from './footer'
-import MainToast from './main-toast'
 import { inject, observer } from 'mobx-react'
 
 @inject('root', 'route')

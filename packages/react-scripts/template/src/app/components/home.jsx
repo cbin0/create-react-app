@@ -1,6 +1,5 @@
 import React from 'react'
 import BaseComponent from './base'
-import Article from './layout/article'
 import { inject, observer } from 'mobx-react'
 
 @inject( 'route', 'root')
