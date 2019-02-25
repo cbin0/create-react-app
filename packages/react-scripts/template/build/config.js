@@ -34,14 +34,6 @@ module.exports = {
       '/graphql': {
         target: 'http://localhost:8888',
         changeOrigin: false
-      },
-      // for static image
-      '/2019[\d]+/': {
-        target: 'http://localhost:8888',
-        filter: function(pathname, req) {
-          return pathname.match('^/2019') && req.method === 'GET'
-        },
-        changeOrigin: true
       }
     }
   }
