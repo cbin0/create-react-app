@@ -1,0 +1,34 @@
+@import 'constant.less';
+@import '~font-awesome/less/font-awesome.less';
+
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+  word-break: break-all;
+}
+
+body {
+  height: auto;
+  background: @bdColor;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.clearfix {
+  &:before, &:after {
+    content: '';
+    display: table;
+  }
+}
