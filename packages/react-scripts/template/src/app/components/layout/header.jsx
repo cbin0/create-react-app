@@ -6,7 +6,7 @@ import BaseComponent from '../base'
 @observer
 export default class Header extends BaseComponent {
   render() {
-    return <Header className="header">
-    </Header>
+    return <div className="header">
+    </div>
   }
 }
