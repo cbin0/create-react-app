@@ -18,7 +18,6 @@ export default class RootStore extends BaseStore {
     document.body.addEventListener('click', (e) => {
       this.focusElement = e.target
     })
-    this.resetHeader()
   }
 
   getStore(storeName) {
