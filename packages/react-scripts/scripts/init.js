@@ -154,17 +154,29 @@ module.exports = function(
     }
   }
 
+  let allCommand
   let command;
   let args;
 
   if (useYarn) {
+    allCommand = 'yarn install';
     command = 'yarnpkg';
     args = ['add'];
   } else {
+    allCommand = 'npm install'
     command = 'npm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
   args.push('react', 'react-dom');
+
+  // install all dependencies
+  console.log(`Installing all dependencies using ${command}...`);
+  console.log();
+  const proc = spawn.sync(allCommand, args, { stdio: 'inherit' });
+  if (proc.status !== 0) {
+    console.error(`\`${allCommand} ${args.join(' ')}\` failed`);
+    return;
+  }
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
