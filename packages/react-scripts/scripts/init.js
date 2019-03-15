@@ -154,6 +154,23 @@ module.exports = function(
     }
   }
 
+  try {
+    fs.moveSync(
+      path.join(appPath, 'eslintrc'),
+      path.join(appPath, '.eslintrc'),
+      []
+    );
+  } catch (err) {
+    // Append if there's already a `.eslintrc` file there
+    if (err.code === 'EEXIST') {
+      const data = fs.readFileSync(path.join(appPath, 'eslintrc'));
+      fs.appendFileSync(path.join(appPath, '.eslintrc'), data);
+      fs.unlinkSync(path.join(appPath, 'eslintrc'));
+    } else {
+      throw err;
+    }
+  }
+
   let command;
   let args;
 
