@@ -1,11 +1,12 @@
-const webpack = require('webpack')
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const version = require('../package.json').version
-const isProduction = process.env.NODE_ENV === 'production'
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const version = require('../package.json').version;
+
+const isProduction = process.env.NODE_ENV === 'production';
 const moment = require('moment');
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 const revision = new GitRevisionPlugin();
 
@@ -23,29 +24,32 @@ const revision = new GitRevisionPlugin();
  */
 
 module.exports = {
-	entry: './src/main.jsx',
+  entry: './src/main.jsx',
 
-	output: {
-		filename: '[name].[hash:7].js',
-		path: path.resolve(__dirname, '..', 'dist')
+  output: {
+    filename: '[name].[hash:7].js',
+    path: path.resolve(__dirname, '..', 'dist')
   },
 
   resolve: {
-    extensions: [ '.js', '.jsx' ],
+    extensions: ['.js', '.jsx'],
     alias: {
-      "@app": path.resolve(__dirname, '..', 'src', 'app'),
-      "@lib": path.resolve(__dirname, '..', 'src', 'app', 'lib'),
-      "@stores": path.resolve(__dirname, '..', 'src', 'app', 'stores'),
-      "@styles": path.resolve(__dirname, '..', 'src', 'app', 'styles'),
-      "@models": path.resolve(__dirname, '..', 'src', 'app', 'models')
+      '@app': path.resolve(__dirname, '..', 'src', 'app'),
+      '@lib': path.resolve(__dirname, '..', 'src', 'app', 'lib'),
+      '@stores': path.resolve(__dirname, '..', 'src', 'app', 'stores'),
+      '@styles': path.resolve(__dirname, '..', 'src', 'app', 'styles'),
+      '@models': path.resolve(__dirname, '..', 'src', 'app', 'models'),
+      '@comps': path.resolve(__dirname, '..', 'src', 'app', 'components'),
+      '@components': path.resolve(__dirname, '..', 'src', 'app', 'components'),
+      '@configs': path.resolve(__dirname, '..', 'src', 'app', 'configs')
     }
   },
 
-	module: {
-		rules: [
+  module: {
+    rules: [
       {
         test: /\.js(x?)$/,
-        exclude: [ /node_modules/ ],
+        exclude: [/node_modules/],
         use: {
           loader: 'babel-loader',
           options: {
@@ -54,8 +58,10 @@ module.exports = {
               '@babel/preset-react'
             ],
             plugins: [
+              ['@babel/plugin-syntax-dynamic-import'],
               ['@babel/plugin-proposal-decorators', { legacy: true }],
-              ['@babel/plugin-proposal-class-properties', { loose: true }]
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              ['import', { libraryName: 'antd', style: true }]
             ]
           }
         }
@@ -122,10 +128,10 @@ module.exports = {
           }
         ]
       }
-		]
-	},
+    ]
+  },
 
-	plugins: [
+  plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
@@ -134,36 +140,36 @@ module.exports = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: "[name].[hash:7].css",
-      chunkFilename: "[id].[hash:7].css"
+      filename: '[name].[hash:7].css',
+      chunkFilename: '[id].[hash:7].css'
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': isProduction === true ? JSON.stringify('production') : JSON.stringify('development'),
       __VERSION__: JSON.stringify(version)
     }),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": `"${isProduction ? 'production' : 'development'}"`,
+      'process.env.NODE_ENV': `"${isProduction ? 'production' : 'development'}"`,
       NODE_ENV: `"${isProduction ? 'production' : 'development'}"`,
       VERSION: `"${revision.version()}"`,
       COMMITHASH: `"${revision.commithash()}"`,
       BRANCH: `"${revision.branch()}"`,
-      UPTIME: `"${moment().format("YYYY-MM-DD HH:mm:ss")}"`
+      UPTIME: `"${moment().format('YYYY-MM-DD HH:mm:ss')}"`
     })
   ],
 
-	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
-			},
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          priority: -10,
+          test: /[\\/]node_modules[\\/]/
+        }
+      },
 
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: true
-		}
-	}
-}
+      chunks: 'async',
+      minChunks: 1,
+      minSize: 30000,
+      name: true
+    }
+  }
+};

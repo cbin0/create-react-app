@@ -1,21 +1,24 @@
-import React from 'react'
-import stores from '@stores'
-import BaseComponent from '../base'
-import Home from '../home'
+import React, { Suspense } from 'react';
+import stores from '@stores';
 import {
-  Router, Redirect,
-  Route, Switch
-} from 'react-router-dom'
+  Router, Route, Switch
+} from 'react-router-dom';
+import BaseComponent from '../base';
+import routes from '../../routes/index';
 
 export default class Content extends BaseComponent {
   render() {
     return (
       <Router history={stores.route.history}>
-        <Switch>
-          <Route exact path='/' component={Home} />
-          <Redirect to='/' />
-        </Switch>
+        <Suspense fallback={<div>loading...</div>}>
+          <Switch>
+            {_.map(routes, (props, k) => {
+              return <Route key={k} {...props} />;
+            })}
+            {/* <Redirect to="/" /> */}
+          </Switch>
+        </Suspense>
       </Router>
-    )
+    );
   }
 }

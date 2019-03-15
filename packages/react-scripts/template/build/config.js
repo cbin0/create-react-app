@@ -1,4 +1,4 @@
-var path = require('path')
+const path = require('path');
 
 module.exports = {
   build: {
@@ -37,4 +37,4 @@ module.exports = {
       }
     }
   }
-}
+};

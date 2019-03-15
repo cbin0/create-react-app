@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+
+      "@app": ["./src/app"],
+      "@app/*": ["./src/app/*"],
+
+      "@lib": ["./src/app/lib"],
+      "@lib/*": ["./src/app/lib/*"],
+
+      "@stores": ["./src/app/stores"],
+      "@stores/*": ["./src/app/stores/*"],
+
+      "@styles": ["./src/app/styles"],
+      "@styles/*": ["./src/app/styles/*"],
+
+      "@models": ["./src/app/models"],
+      "@models/*": ["./src/app/models/*"],
+
+      "@comps": ["./src/app/components"],
+      "@comps/*": ["./src/app/component/s*"],
+
+      "@components": ["./src/app/components"],
+      "@components/*": ["./src/app/components/*"],
+
+      "@configs": ["./src/app/configs"],
+      "@configs/*": ["./src/app/configs/*"]
+    }
+  }
+}
