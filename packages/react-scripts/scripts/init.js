@@ -138,6 +138,7 @@ module.exports = function(
   // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
   // See: https://github.com/npm/npm/issues/1862
   try {
+    console.log('moving gitignore to .gitignore');
     fs.moveSync(
       path.join(appPath, 'gitignore'),
       path.join(appPath, '.gitignore'),
@@ -146,6 +147,7 @@ module.exports = function(
   } catch (err) {
     // Append if there's already a `.gitignore` file there
     if (err.code === 'EEXIST') {
+      console.log('error! appending...');
       const data = fs.readFileSync(path.join(appPath, 'gitignore'));
       fs.appendFileSync(path.join(appPath, '.gitignore'), data);
       fs.unlinkSync(path.join(appPath, 'gitignore'));
@@ -155,6 +157,7 @@ module.exports = function(
   }
 
   try {
+    console.log('moving eslintrc to .eslintrc');
     fs.moveSync(
       path.join(appPath, 'eslintrc'),
       path.join(appPath, '.eslintrc'),
@@ -163,6 +166,7 @@ module.exports = function(
   } catch (err) {
     // Append if there's already a `.eslintrc` file there
     if (err.code === 'EEXIST') {
+      console.log('error! appending...');
       const data = fs.readFileSync(path.join(appPath, 'eslintrc'));
       fs.appendFileSync(path.join(appPath, '.eslintrc'), data);
       fs.unlinkSync(path.join(appPath, 'eslintrc'));
