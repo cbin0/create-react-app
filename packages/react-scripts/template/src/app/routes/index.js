@@ -1,13 +1,6 @@
-import { lazy } from 'react';
 import { createLazy } from '@lib/utils';
 
-const Home = createLazy(lazy(() => {
-  return import(
-    /* webpackChunkName: "home" */
-    /* webpackMode: "eager" */
-    './home');
-}), undefined, true);
-
+const Home = createLazy('home', () => import(/* webpackChunkName: "home" */ /* webpackMode: "eager" */'./home'));
 
 export default [
   { path: '/', exact: true, component: Home }

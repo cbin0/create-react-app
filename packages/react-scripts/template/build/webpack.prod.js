@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const config = require('./config');
 const common = require('./webpack.base');
-const UglifyjsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
@@ -12,13 +12,16 @@ const webpackConfig = merge(common, {
   output: {
     publicPath: config.build.assetsPublicPath
   },
-  plugins: [
-    new UglifyjsPlugin({
-      uglifyOptions: { // 为了防止className Contructor.name 被转为t
+  optimization: {
+    minimizer: [new TerserPlugin({
+      terserOptions: {
         keep_classnames: true,
         keep_fnames: true
-      }
-    }),
+      },
+      parallel: require('os').cpus().length
+    })]
+  },
+  plugins: [
     // copy custom static assets
     new CopyPlugin([
       {

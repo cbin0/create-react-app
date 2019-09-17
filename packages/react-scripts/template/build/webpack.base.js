@@ -10,19 +10,6 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 const revision = new GitRevisionPlugin();
 
-/*
- * SplitChunksPlugin is enabled by default and replaced
- * deprecated CommonsChunkPlugin. It automatically identifies modules which
- * should be splitted of chunk by heuristics using module duplication count and
- * module category (i. e. node_modules). And splits the chunks…
- *
- * It is safe to remove "splitChunks" from the generated configuration
- * and was added as an educational example.
- *
- * https://webpack.js.org/plugins/split-chunks-plugin/
- *
- */
-
 module.exports = {
   entry: './src/main.jsx',
 
@@ -41,7 +28,9 @@ module.exports = {
       '@models': path.resolve(__dirname, '..', 'src', 'app', 'models'),
       '@comps': path.resolve(__dirname, '..', 'src', 'app', 'components'),
       '@components': path.resolve(__dirname, '..', 'src', 'app', 'components'),
-      '@configs': path.resolve(__dirname, '..', 'src', 'app', 'configs')
+      '@configs': path.resolve(__dirname, '..', 'src', 'app', 'configs'),
+      '@routes': path.resolve(__dirname, '..', 'src', 'app', 'routes'),
+      '@static': path.resolve(__dirname, '..', 'static')
     }
   },
 
@@ -60,7 +49,8 @@ module.exports = {
             plugins: [
               ['@babel/plugin-syntax-dynamic-import'],
               ['@babel/plugin-proposal-decorators', { legacy: true }],
-              ['@babel/plugin-proposal-class-properties', { loose: true }]
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              ['@babel/plugin-proposal-optional-chaining', { loose: false }]
             ]
           }
         }
@@ -92,7 +82,7 @@ module.exports = {
               plugins: [
                 require('postcss-import')({ addDependencyTo: webpack }),
                 require('postcss-url')(),
-                require('postcss-cssnext')(),
+                require('autoprefixer'),
                 require('postcss-reporter')(),
                 require('postcss-browser-reporter')({ disabled: isProduction })
               ]
@@ -131,7 +121,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
@@ -143,12 +133,9 @@ module.exports = {
       chunkFilename: '[id].[hash:7].css'
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isProduction === true ? JSON.stringify('production') : JSON.stringify('development'),
-      __VERSION__: JSON.stringify(version)
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': `"${isProduction ? 'production' : 'development'}"`,
-      NODE_ENV: `"${isProduction ? 'production' : 'development'}"`,
+      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+      NODE_ENV: `"${process.env.NODE_ENV}"`,
+      __VERSION__: JSON.stringify(version),
       VERSION: `"${revision.version()}"`,
       COMMITHASH: `"${revision.commithash()}"`,
       BRANCH: `"${revision.branch()}"`,

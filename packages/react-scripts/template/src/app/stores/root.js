@@ -10,6 +10,7 @@ export default class RootStore extends BaseStore {
    * 目前只有一个可观察的状态
    */
   @observable storeStatus = new Map()
+  @observable lazy = {}
 
   constructor() {
     super();
@@ -65,18 +66,4 @@ export default class RootStore extends BaseStore {
     return this.isMouseIn(document.querySelector(selector));
   }
 
-  updateFooterItems (location, value) {
-    const arr = toJS(this.footerItems);
-    _.set(arr, location, value);
-    this.footerItems = arr;
-  }
-
-  getAllEnumTypes() {
-    const arr = [
-      'quotationcustomerTypeEnumType'
-    ];
-    this.fetchql.getEnumTypes(arr).then((rzt) => {
-      console.log('enum types', rzt);
-    });
-  }
 }

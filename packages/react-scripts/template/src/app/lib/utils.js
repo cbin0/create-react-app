@@ -1,4 +1,6 @@
-import React, { Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
+import stores from '@stores';
+import { t } from '@lib/i18n';
 
 const debug = require('debug')('client:lib:utils');
 const util = require('util');
@@ -9,11 +11,24 @@ const obj2QlOpts = (obj) => {
   return str;
 };
 
-const createLazy = (Lazy, Loading = <div>loading....</div>, isReturnFunc = false) => {
-  if (!isReturnFunc) { return (<Suspense fallback={Loading}><Lazy /></Suspense>); }
-  return props => {
+const createLazy = (name, load, Loading = <div>{t('loading....')}</div>) => {
+  const actLoad = async () => {
+    let config = stores.root.lazy[name] || {};
+    config.loading = true;
+    let res = await load();
+    config.loading = false;
+    return res;
+  };
+  const Lazy = lazy(actLoad);
+  const component = props => {
     return (<Suspense fallback={Loading}><Lazy {...props} /></Suspense>);
   };
+  if (name) {
+    _.set(stores.root.lazy, `${name}.load`, actLoad);
+    component.lazyName = name;
+    component.lazyLoad = actLoad;
+  }
+  return component;
 };
 
 export {

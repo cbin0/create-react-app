@@ -2,7 +2,6 @@
 const _ = require('lodash');
 const fs = require('fs');
 const { spawn } = require('child_process');
-// const json = require('./translate.json');
 const json = {
   zh: require('../src/app/locales/zh.json'),
   en: require('../src/app/locales/en.json')
@@ -14,7 +13,7 @@ oder.stdout.on('data', (data) => {
   // 将找到的文件分割成数组
   let files = data.toString().split('\n');
   let arrs = [];
-  let reg = /[.\s]t\(['"]([^)]+)['"]\)/g;
+  let reg = /[[.\s]t\((['"])(.+?)\s*(?<!\\)\1(,|\))/g;
   // 找到需要翻译的文字部分
   _.each(files, (item) => {
     let res;
@@ -22,7 +21,6 @@ oder.stdout.on('data', (data) => {
       let text = (fs.readFileSync(item, { encoding: 'utf8' })).trim();
       res = reg.exec(text);
       while (res) {
-        console.log(item, res[1]);
         arrs.push(res);
         res = reg.exec(text);
       }

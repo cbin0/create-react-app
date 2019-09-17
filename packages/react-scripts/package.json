@@ -1,6 +1,6 @@
 {
   "name": "mobx-react-scripts",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Mobx Configuration and scripts for Create React App.",
   "repository": "cbin0/create-react-app",
   "license": "MIT",

@@ -3,6 +3,7 @@ const common = require('./webpack.base');
 const config = require('./config');
 const webpack = require('webpack');
 const Jarvis = require('webpack-jarvis');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 opts = {
   entry: [
@@ -26,6 +27,12 @@ opts = {
 if (process.env.JA) {
   opts.plugins.push(new Jarvis({
     port: 1337 // optional: set a port
+  }));
+}
+
+if (process.env.BA) {
+  opts.plugins.push(new BundleAnalyzerPlugin({
+    analyzerPort: 1338
   }));
 }
 

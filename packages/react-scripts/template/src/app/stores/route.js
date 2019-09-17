@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import qs from 'query-string';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 import { RouterStore as BaseRouterStore, syncHistoryWithStore } from 'mobx-react-router';
+import stores from '@stores';
 
 export default class RouterStore extends BaseRouterStore {
   history = syncHistoryWithStore(createHistory(), this)
@@ -10,9 +11,9 @@ export default class RouterStore extends BaseRouterStore {
     return _.get(qs.parse(this.location.search), name, defaultValue);
   }
 
-  goto(opt) {
-    let { search, replace, route } = _.extend({
-      search: {}, replace: true, route: '/'
+  async goto(opt) {
+    let { search, replace, route, action, lazy } = _.extend({
+      search: {}, replace: true, route: '/', action: 'push'
     }, opt);
     let pathname = route || this.location.pathname;
     let curSearch = qs.parse(this.location.search);
@@ -23,7 +24,10 @@ export default class RouterStore extends BaseRouterStore {
     ) {
       return;
     }
-    this.history.push({
+    if (lazy) {
+      await stores.root.lazy[lazy]?.load?.();
+    }
+    this.history[action]({
       pathname,
       search: mergedSearch
     });

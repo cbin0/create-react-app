@@ -12,12 +12,8 @@ let webpack = require('webpack');
 let proxyMiddleware = require('http-proxy-middleware');
 let webpackConfig = require('./webpack.dev');
 
-// default port where dev server listens for incoming traffic
 let port = config.dev.port;
-// automatically open browser, if not set will be false
 let autoOpenBrowser = !!config.dev.autoOpenBrowser;
-// Define HTTP proxies to your custom API backend
-// https://github.com/chimurai/http-proxy-middleware
 let proxyTable = config.dev.proxyTable;
 
 let app = express();
@@ -31,7 +27,7 @@ let devMiddleware = require('webpack-dev-middleware')(compiler, {
 let hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: () => {}
 });
-// force page reload when html-webpack-plugin template changes
+
 compiler.plugin('compilation', (compilation) => {
   compilation.plugin('html-webpack-plugin-after-emit', (data, cb) => {
     hotMiddleware.publish({ action: 'reload' });
@@ -62,9 +58,8 @@ app.use(hotMiddleware);
 let staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
 app.use(staticPath, express.static('./static'));
 
-let uri = `http://localhost:${port}`;
-
 let server = app.listen(port);
+let uri = `http://localhost:${port}`;
 
 module.exports = {
   ready: new Promise(resolve => {
